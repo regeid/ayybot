@@ -1,0 +1,26 @@
+{
+  "name": "whatsapp-bot",
+  "version": "1.0.0",
+  "description": "WhatsApp Bot dengan QR Viewer dan Log Real-time",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "keywords": [],
+  "author": "Your Name",
+  "license": "MIT",
+  "dependencies": {
+    "@hapi/boom": "^10.0.1",
+    "@napi-rs/canvas": "^0.1.34",
+    "@whiskeysockets/baileys": "^6.7.9",
+    "dotenv": "^16.4.7",
+    "ejs": "^3.1.9",
+    "express": "^4.18.2",
+    "fs": "0.0.1-security",
+    "node-fetch": "^3.3.2",
+    "path": "^0.12.7",
+    "qrcode": "^1.5.1",
+    "socket.io": "^4.8.1",
+    "ws": "^8.13.0"
+  }
+}

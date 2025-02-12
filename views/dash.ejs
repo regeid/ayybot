@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WhatsApp Dashboard - <%= phoneNumber %></title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 font-mono text-gray-900">
+  <div class="container mx-auto py-10 px-5">
+    <h1 class="text-3xl font-bold text-center mb-8">Dashboard - <%= phoneNumber %></h1>
+
+    <!-- QR Status -->
+    <div id="qr-status" class="max-w-xl mx-auto bg-white shadow-md rounded px-8 pt-6 pb-8 mt-6 text-center">
+      <% if (connected) { %>
+        <div class="text-green-600 font-bold">Terhubung ke WhatsApp!</div>
+      <% } else if (qr) { %>
+        <img src="<%= qr %>" alt="QR Code" class="h-40 w-40 mx-auto">
+      <% } else { %>
+        <div class="h-40 w-40 bg-gray-200 mx-auto flex items-center justify-center">
+          <span class="text-gray-500">QR Placeholder</span>
+        </div>
+      <% } %>
+    </div>
+
+    <!-- Logs -->
+    <div id="logs" class="max-w-xl mx-auto bg-white shadow-md rounded px-8 pt-6 pb-8 mt-6">
+      <h2 class="text-2xl font-semibold mb-4">Logs</h2>
+      <ul id="log-list" class="list-disc rounded h-60 overflow-auto pl-5 space-y-2 bg-blue-50">
+        <% logs.forEach(function(log) { %>
+          <li class="text-sm text-gray-700"><%= log %></li>
+        <% }); %>
+      </ul>
+    </div>
+  </div>
+
+  <script src="/socket.io/socket.io.js"></script>
+  <script>
+    const socket = io();
+
+    // Update logs
+    socket.on('log_update', (logs) => {
+      const logList = document.getElementById('log-list');
+      logList.innerHTML = '';
+      logs.forEach(log => {
+        const li = document.createElement('li');
+        li.textContent = log;
+        li.classList.add('text-gray-700');
+        logList.appendChild(li);
+      });
+    });
+
+    // Update QR Code
+    socket.on('qr_update', (data) => {
+      if (data.phoneNumber === '<%= phoneNumber %>') {
+        const qrStatus = document.getElementById('qr-status');
+        qrStatus.innerHTML = data.qr 
+          ? `<img src="${data.qr}" alt="QR Code" class="h-40 w-40 mx-auto">` 
+          : '<div class="h-40 w-40 bg-gray-200 mx-auto flex items-center justify-center"><span class="text-gray-500">QR Placeholder</span></div>';
+      }
+    });
+  </script>
+</body>
+</html>
